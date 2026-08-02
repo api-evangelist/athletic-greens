@@ -1,7 +1,17 @@
 aid: athletic-greens
 name: AG1
-description: 'AG1 is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'AG1 (formerly Athletic Greens) is a direct-to-consumer health and nutrition
+  company founded in December 2010 by Chris Ashenden and headquartered in Carson City,
+  Nevada. It sells a single flagship product - AG1, a daily foundational nutrition
+  powder - on a subscription model through drinkag1.com, and the brand was renamed
+  from Athletic Greens to AG1 in December 2021. Revenue grew from roughly $160M in
+  2021 to approximately $600M in 2024, with a valuation near $1.2B reported in January
+  2025, built largely on podcast and creator affiliate marketing. AG1 is a consumer
+  commerce business rather than an API provider: as of the August 2026 enrichment pass
+  it publishes no developer portal, no API documentation, and no machine-readable API
+  contract, and DNS resolution shows no api/developer/docs subdomains. Its storefront
+  runs on Shopify (shop.drinkag1.com) behind a Vercel edge, and it appears in the API
+  Evangelist network as a secondary-market company profile.'
 url: https://raw.githubusercontent.com/api-evangelist/athletic-greens/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
@@ -12,6 +22,14 @@ created: '2026-08-02'
 modified: '2026-08-02'
 tags:
 - Company
+- Consumer
+- Health
+- Nutrition
+- Supplements
+- Direct to Consumer
+- Ecommerce
+- Subscription
+- Wellness
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -19,5 +37,19 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/athletic-greens-domain-security.yml
 - type: Website
+  url: https://drinkag1.com/
+- type: SecondaryMarket
   url: https://forgeglobal.com/athletic-greens_stock/
+- type: FAQ
+  url: https://drinkag1.com/about-ag1/faq
+- type: PrivacyPolicy
+  url: https://drinkag1.com/privacy
+- type: TermsOfService
+  url: https://drinkag1.com/about-us/terms-and-conditions
+- type: Support
+  url: mailto:support@drinkag1.com
+- type: SignUp
+  url: https://drinkag1.com/members
