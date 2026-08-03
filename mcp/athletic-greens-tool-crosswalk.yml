@@ -1,0 +1,125 @@
+generated: '2026-08-02'
+method: derived
+source: mcp/athletic-greens-mcp.yml + graphql/athletic-greens-storefront.graphql
+note: AG1 publishes no OpenAPI, so the machine-readable core this crosswalk binds to is
+  the anonymously introspectable Shopify Storefront GraphQL schema served from
+  shop.drinkag1.com. Every GraphQL field named below was verified present in the captured
+  SDL; every MCP tool named below was returned by a live tools/list. Confidence is
+  semantic where the MCP server composes several GraphQL operations behind one tool.
+surfaces:
+  graphql:
+    endpoint: https://shop.drinkag1.com/api/2026-04/graphql.json
+    introspection: open (anonymous introspection returned the full schema)
+    artifact: graphql/athletic-greens-storefront.graphql
+    query_fields: 35
+    mutation_fields: 41
+    types: 416
+  mcp_storefront:
+    endpoint: https://shop.drinkag1.com/api/mcp
+    tools_list: open (anonymous)
+    artifact: mcp/athletic-greens-tools-list.json
+  mcp_customer_account:
+    endpoint: https://account.drinkag1.com/customer/api/mcp
+    tools_list: open (anonymous); invocation requires OAuth scope customer-account-mcp-api:full
+    artifact: mcp/athletic-greens-customer-account-tools-list.json
+  mcp_ucp:
+    endpoint: https://shop.drinkag1.com/api/ucp/mcp
+    tools_list: gated (requires a resolvable UCP agent profile; anonymous call returns -32001)
+    artifact: well-known/athletic-greens-ucp.json
+  openapi: none published
+crosswalk:
+- tool: search_catalog
+  server: storefront-mcp
+  category: catalog
+  graphql: [products, search, predictiveSearch, collection]
+  binding: graphql
+  confidence: medium
+  note: The tool returns a UCP dev.ucp.shopping.catalog.search payload; the storefront
+    schema exposes the same capability through the products/search connections. The
+    server-side composition is not published, so the mapping is semantic.
+- tool: get_product_details
+  server: storefront-mcp
+  category: catalog
+  graphql: [product, productByHandle]
+  binding: graphql
+  confidence: high
+  note: Both take a product identifier and resolve variants via options.
+- tool: get_cart
+  server: storefront-mcp
+  category: cart
+  graphql: [cart]
+  binding: graphql
+  confidence: high
+- tool: update_cart
+  server: storefront-mcp
+  category: cart
+  graphql: [cartCreate, cartLinesAdd, cartLinesUpdate, cartLinesRemove, cartBuyerIdentityUpdate,
+    cartDeliveryAddressesAdd, cartDeliveryAddressesReplace, cartSelectedDeliveryOptionsUpdate,
+    cartDiscountCodesUpdate, cartGiftCardCodesAdd, cartGiftCardCodesUpdate, cartGiftCardCodesRemove,
+    cartNoteUpdate]
+  binding: graphql
+  confidence: high
+  note: One fan-out tool. Each named input on the tool schema maps to a distinct cart
+    mutation - add_items/update_items/remove_line_ids to cartLinesAdd/Update/Remove,
+    buyer_identity to cartBuyerIdentityUpdate, delivery_addresses_* to
+    cartDeliveryAddressesAdd/Replace, selected_delivery_options to
+    cartSelectedDeliveryOptionsUpdate, discount_codes to cartDiscountCodesUpdate,
+    gift_card_codes to cartGiftCardCodes*, note to cartNoteUpdate.
+- tool: search_shop_policies_and_faqs
+  server: storefront-mcp
+  category: content
+  graphql: [shop, page, pageByHandle, pages]
+  binding: graphql
+  confidence: medium
+  note: Shop exposes privacyPolicy, refundPolicy, shippingPolicy, subscriptionPolicy,
+    termsOfSale and termsOfService; FAQ content lives in pages/metaobjects. The tool
+    adds retrieval/ranking that the schema does not expose.
+mcp_only:
+- tool: get_most_recent_order_status
+  server: customer-account-mcp
+  reason: Order history is served by the Shopify Customer Account API, not the Storefront
+    GraphQL schema captured here.
+- tool: get_order_status
+  server: customer-account-mcp
+  reason: Same - customer-scoped order lookup, OAuth-gated.
+- tool: get_store_credit_balances
+  server: customer-account-mcp
+  reason: Store credit is a customer-account concept with no Storefront GraphQL field.
+- tool: request_return
+  server: customer-account-mcp
+  reason: Returns are a customer-account write with no Storefront GraphQL equivalent.
+graphql_only:
+- capability: checkout completion
+  fields: [cartPrepareForCompletion, cartSubmitForCompletion, cartCompletionAttempt,
+    cartPaymentUpdate, cartBillingAddressUpdate]
+  note: The storefront MCP tool set stops at cart; completion is reachable via GraphQL
+    or via the UCP checkout capability, both of which require buyer approval.
+- capability: customer authentication and profile (classic storefront tokens)
+  fields: [customer, customerAccessTokenCreate, customerAccessTokenRenew,
+    customerAccessTokenDelete, customerCreate, customerUpdate, customerRecover,
+    customerReset, customerActivate, customerAddressCreate, customerAddressUpdate,
+    customerAddressDelete, customerDefaultAddressUpdate]
+- capability: Shop Pay payment request sessions
+  fields: [shopPayPaymentRequestSessionCreate, shopPayPaymentRequestSessionSubmit,
+    shopPayInstallmentsPricing]
+- capability: content and merchandising
+  fields: [article, articles, blog, blogs, blogByHandle, menu, metaobject, metaobjects,
+    productRecommendations, productTags, productTypes, collections, collectionByHandle,
+    urlRedirects, sitemap, locations, localization, paymentSettings, publicApiVersions]
+ucp_only:
+- capability: dev.ucp.shopping.checkout
+- capability: dev.ucp.shopping.fulfillment
+- capability: dev.ucp.shopping.discount
+- capability: dev.ucp.shopping.order
+  note: Advertised in /.well-known/ucp but the UCP endpoint's tool schemas could not be
+    read anonymously, so no tool-level rows are asserted here.
+coverage:
+  mcp_tools_total: 9
+  mcp_tools_storefront: 5
+  mcp_tools_customer_account: 4
+  tools_bound_to_graphql: 5
+  mcp_only_tools: 4
+  graphql_query_fields: 35
+  graphql_mutation_fields: 41
+  graphql_fields_with_a_tool: 18
+  openapi_operations: 0

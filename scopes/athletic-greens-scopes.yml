@@ -1,0 +1,40 @@
+generated: '2026-08-02'
+method: probed
+source: https://shop.drinkag1.com/.well-known/oauth-authorization-server
+note: Scopes are read verbatim from the live RFC 8414 authorization-server metadata
+  served on AG1's hosts. AG1 publishes no scope reference page; descriptions below
+  state the scope's effect as observed on the protected surfaces, and are marked
+  derived where the metadata carries no description.
+schemes:
+- name: shopify-customer-accounts-oidc
+  source: well-known/athletic-greens-oauth-authorization-server.json
+  issuer: https://shopify.com/authentication/15234600
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://account.drinkag1.com/authentication/oauth/authorize
+    tokenUrl: https://account.drinkag1.com/authentication/oauth/token
+    pkce: S256
+scopes:
+- scope: openid
+  description: OpenID Connect - issue an ID token identifying the AG1 customer.
+  description_method: derived
+  flows: [authorizationCode]
+  sources: [well-known/athletic-greens-oauth-authorization-server.json]
+- scope: email
+  description: Release the customer's email address and email_verified claim.
+  description_method: derived
+  flows: [authorizationCode]
+  sources: [well-known/athletic-greens-oauth-authorization-server.json]
+- scope: customer-account-api:full
+  description: Full access to the Shopify Customer Account API for the authenticated
+    AG1 customer - orders, subscriptions, addresses, payment methods, store credit.
+  description_method: derived
+  flows: [authorizationCode]
+  sources: [well-known/athletic-greens-oauth-authorization-server.json]
+- scope: customer-account-mcp-api:full
+  description: Full access to the Customer Account MCP server at
+    https://account.drinkag1.com/customer/api/mcp - order status, store credit balances
+    and return requests on the authenticated customer's behalf.
+  description_method: derived
+  flows: [authorizationCode]
+  sources: [well-known/athletic-greens-oauth-authorization-server.json]

@@ -1,0 +1,43 @@
+generated: '2026-08-02'
+method: probed
+source: live version probes of shop.drinkag1.com, 2026-08-02
+note: AG1 itself publishes no versioning policy, deprecation policy, SLA, status page or
+  changelog. What follows is the versioning behaviour observed on the surfaces served
+  from AG1 hosts. Where a policy exists only at the platform level it is recorded as
+  inherited and NOT wired as an AG1 StatusPage/Deprecation pointer, because AG1 does not
+  publish it.
+versioning:
+  scheme: date-based path segment
+  current: '2026-04'
+  surface: https://shop.drinkag1.com/api/{YYYY-MM}/graphql.json
+  observed_serving: ['2025-04', '2025-07', '2025-10', '2026-01', '2026-04', unstable]
+  response_header: x-shopify-api-version
+  mcp_version_header: x-shopify-mcp-api-version
+  mcp_version_observed: unstable
+ucp:
+  current: '2026-04-08'
+  supported_versions:
+    '2026-04-08': https://athleticgreensusa.myshopify.com/.well-known/ucp/2026-04-08
+    '2026-01-23': https://athleticgreensusa.myshopify.com/.well-known/ucp/2026-01-23
+  discovery: https://shop.drinkag1.com/.well-known/ucp
+  note: the merchant profile advertises version negotiation - two protocol versions are
+    served concurrently, the older one remaining addressable at its own URL
+deprecation:
+  policy_url: null
+  sunset_header: false
+  observed: no Deprecation or Sunset response header was returned by any probed endpoint
+  inherited:
+    source: Shopify platform API versioning (quarterly releases, each version supported
+      for a fixed window)
+    note: not published by AG1; recorded for context only
+sla:
+  url: null
+status_page:
+  url: null
+  inherited: https://www.shopifystatus.com/
+  note: platform status page, not an AG1 property; no AG1 status page exists
+changelog:
+  url: null
+  note: AG1 publishes no API changelog; version drift is observable only through the
+    date-versioned GraphQL path and the UCP supported_versions map
+deprecated_operations: []

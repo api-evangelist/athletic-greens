@@ -1,0 +1,141 @@
+generated: '2026-08-02'
+method: derived
+source: graphql/athletic-greens-storefront.graphql
+note: Derived mechanically from the Storefront GraphQL schema captured by anonymous
+  introspection of https://shop.drinkag1.com/api/2026-04/graphql.json. Every entity and
+  relationship below was read from that SDL - nothing is inferred. Field counts are the
+  type's field count in the schema; has_many marks a GraphQL connection.
+schema:
+  types: 416
+  query_fields: 35
+  mutation_fields: 41
+  version: '2026-04'
+entities:
+- name: Shop
+  fields: 22
+  description: The AG1 (US) store itself - name, brand, policies (privacy, refund,
+    shipping, subscription, terms of sale, terms of service), payment settings,
+    ships-to countries.
+  relationships:
+  - {type: has_one, target: ShopPayInstallmentsPricing, via: shopPayInstallmentsPricing}
+  - {type: has_many, target: Metafield, via: metafields}
+- name: Product
+  fields: 36
+  description: A sellable AG1 product; the root of the catalog surfaced by the
+    search_catalog and get_product_details MCP tools.
+  relationships:
+  - {type: has_many, target: ProductVariant, via: variants}
+  - {type: has_one, target: ProductVariant, via: selectedOrFirstAvailableVariant}
+  - {type: has_many, target: Collection, via: collections}
+  - {type: has_many, target: Image, via: images}
+  - {type: has_one, target: Image, via: featuredImage}
+  - {type: has_many, target: ProductOption, via: options}
+  - {type: has_many, target: SellingPlanGroup, via: sellingPlanGroups}
+  - {type: has_many, target: Metafield, via: metafields}
+- name: ProductVariant
+  fields: 30
+  description: A purchasable variant (pouch, bundle, subscription cadence) of a Product.
+  relationships:
+  - {type: belongs_to, target: Product, via: product}
+  - {type: has_one, target: Image, via: image}
+  - {type: has_many, target: SellingPlanAllocation, via: sellingPlanAllocations}
+  - {type: has_many, target: QuantityPriceBreak, via: quantityPriceBreaks}
+  - {type: has_many, target: StoreAvailability, via: storeAvailability}
+  - {type: has_many, target: ProductVariantComponent, via: components}
+- name: Collection
+  fields: 13
+  relationships:
+  - {type: has_many, target: Product, via: products}
+  - {type: has_one, target: Image, via: image}
+  - {type: has_many, target: Metafield, via: metafields}
+- name: SellingPlanGroup
+  fields: 4
+  description: The subscription construct behind AG1's subscribe-and-save model.
+  relationships:
+  - {type: has_many, target: SellingPlan, via: sellingPlans}
+- name: SellingPlan
+  fields: 11
+  relationships:
+  - {type: has_many, target: Metafield, via: metafields}
+- name: Cart
+  fields: 19
+  description: The agent-addressable cart - the object get_cart and update_cart operate
+    on, and the root of the UCP dev.ucp.shopping.cart capability.
+  relationships:
+  - {type: has_many, target: BaseCartLine, via: lines}
+  - {type: has_one, target: CartCost, via: cost}
+  - {type: has_one, target: CartBuyerIdentity, via: buyerIdentity}
+  - {type: has_many, target: CartDeliveryGroup, via: deliveryGroups}
+  - {type: has_many, target: Metafield, via: metafields}
+- name: CartLine
+  fields: 11
+  description: One line in the cart (implements BaseCartLine); ComponentizableCartLine
+    is the bundle variant that carries lineComponents.
+  relationships:
+  - {type: belongs_to, target: Cart, via: 'lines (inverse)'}
+- name: CartBuyerIdentity
+  fields: 7
+  relationships:
+  - {type: has_one, target: Customer, via: customer}
+- name: CartDeliveryGroup
+  fields: 6
+  relationships:
+  - {type: has_many, target: BaseCartLine, via: cartLines}
+  - {type: has_one, target: MailingAddress, via: deliveryAddress}
+- name: Customer
+  fields: 18
+  description: Storefront view of the AG1 customer; the deeper customer record is
+    served by the OAuth-gated Customer Account API and its MCP server.
+  relationships:
+  - {type: has_many, target: Order, via: orders}
+  - {type: has_many, target: MailingAddress, via: addresses}
+  - {type: has_one, target: MailingAddress, via: defaultAddress}
+  - {type: has_many, target: Metafield, via: metafields}
+- name: Order
+  fields: 41
+  relationships:
+  - {type: has_many, target: OrderLineItem, via: lineItems}
+  - {type: has_one, target: MailingAddress, via: shippingAddress}
+  - {type: has_one, target: MailingAddress, via: billingAddress}
+  - {type: has_many, target: DiscountApplication, via: discountApplications}
+  - {type: has_many, target: Metafield, via: metafields}
+- name: OrderLineItem
+  fields: 8
+  relationships:
+  - {type: has_one, target: ProductVariant, via: variant}
+- name: MailingAddress
+  fields: 19
+- name: Metafield
+  fields: 12
+  description: Generic key/value extension attached to almost every entity.
+  relationships:
+  - {type: has_many, target: MetafieldReference, via: references}
+- name: Page
+  fields: 12
+  description: Store content pages - the backing store for search_shop_policies_and_faqs.
+  relationships:
+  - {type: has_many, target: Metafield, via: metafields}
+- name: Blog
+  fields: 10
+  relationships:
+  - {type: has_many, target: Article, via: articles}
+- name: Article
+  fields: 19
+  relationships:
+  - {type: belongs_to, target: Blog, via: blog}
+  - {type: has_many, target: Comment, via: comments}
+  - {type: has_one, target: Image, via: image}
+- name: Location
+  fields: 5
+- name: Menu
+  fields: 5
+- name: Image
+  fields: 9
+agent_surface_mapping:
+  search_catalog: [Product, Collection, Filter]
+  get_product_details: [Product, ProductVariant, ProductOption, Image, SellingPlan]
+  get_cart: [Cart, CartLine, CartCost, CartDeliveryGroup]
+  update_cart: [Cart, CartLine, CartBuyerIdentity, MailingAddress, CartDeliveryGroup]
+  search_shop_policies_and_faqs: [Shop, Page]
+  customer_account_mcp: [Order, OrderLineItem, Customer]
+  crosswalk: mcp/athletic-greens-tool-crosswalk.yml

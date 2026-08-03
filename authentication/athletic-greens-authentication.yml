@@ -1,0 +1,63 @@
+generated: '2026-08-02'
+method: probed
+source: https://shop.drinkag1.com/.well-known/oauth-authorization-server
+docs: https://shop.drinkag1.com/agents.md
+note: AG1 publishes no OpenAPI, so this profile is built from live RFC 8414 / OIDC
+  discovery documents and from observed behaviour of each surface, not from
+  securitySchemes.
+summary:
+  types: [oauth2, openIdConnect, none]
+  api_key_in: []
+  oauth2_flows: [authorization_code, refresh_token, urn:ietf:params:oauth:grant-type:jwt-bearer]
+  pkce: S256
+  bearer_methods: [header]
+schemes:
+- name: shopify-customer-accounts-oidc
+  type: openIdConnect
+  openIdConnectUrl: https://account.drinkag1.com/.well-known/openid-configuration
+  issuer: https://shopify.com/authentication/15234600
+  authorization_endpoint: https://account.drinkag1.com/authentication/oauth/authorize
+  token_endpoint: https://account.drinkag1.com/authentication/oauth/token
+  end_session_endpoint: https://account.drinkag1.com/authentication/logout
+  jwks_uri: https://account.drinkag1.com/authentication/.well-known/jwks.json
+  token_endpoint_auth_methods_supported: [client_secret_basic]
+  response_types_supported: [code]
+  code_challenge_methods_supported: [S256]
+  grant_types_supported: [authorization_code, refresh_token, 'urn:ietf:params:oauth:grant-type:jwt-bearer']
+  id_token_signing_alg_values_supported: [RS256]
+  subject_types_supported: [public]
+  claims_supported: [iss, sub, aud, exp, iat, nonce, sid, email, email_verified]
+  scopes: scopes/athletic-greens-scopes.yml
+  protects:
+  - https://account.drinkag1.com/customer/api/mcp
+  - https://shop.drinkag1.com (declared resource in /.well-known/oauth-protected-resource)
+  sources:
+  - well-known/athletic-greens-oauth-authorization-server.json
+  - well-known/athletic-greens-openid-configuration.json
+  - well-known/athletic-greens-jwks.json
+- name: storefront-mcp-anonymous
+  type: none
+  applies_to: https://shop.drinkag1.com/api/mcp
+  observed: 'JSON-RPC tools/list and catalog/cart tools answered 200 with no credential
+    on 2026-08-02'
+- name: storefront-graphql-public
+  type: none
+  applies_to: https://shop.drinkag1.com/api/{version}/graphql.json
+  observed: full anonymous introspection succeeded; the public storefront token is
+    injected by the storefront edge rather than required from the caller
+- name: ucp-agent-profile
+  type: agent-profile
+  applies_to: https://shop.drinkag1.com/api/ucp/mcp
+  observed: 'anonymous tools/list returned HTTP 422 with JSON-RPC -32001
+    invalid_profile_url ("Unable to fetch agent profile: Missing profile uri"); the
+    UCP transport authenticates the calling agent by a resolvable agent profile URI
+    passed in meta.ucp-agent.profile'
+protected_resources:
+- resource: https://shop.drinkag1.com
+  authorization_servers: [https://account.drinkag1.com, https://shopify.com/authentication/15234600]
+  bearer_methods_supported: [header]
+  source: well-known/athletic-greens-oauth-protected-resource.json
+- resource: https://account.drinkag1.com
+  authorization_servers: [https://account.drinkag1.com, https://shopify.com/authentication/15234600]
+  bearer_methods_supported: [header]
+  source: well-known/athletic-greens-account-oauth-protected-resource.json

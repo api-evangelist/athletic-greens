@@ -1,0 +1,51 @@
+generated: '2026-08-02'
+method: probed
+source: live error responses from shop.drinkag1.com, 2026-08-02
+format: json-rpc-2.0
+note: AG1 publishes no OpenAPI and no error reference, so this catalog records only
+  error shapes actually observed on the live surface plus the HTTP statuses returned by
+  discovery probes. It is deliberately short - nothing here is inferred from a spec that
+  does not exist.
+envelopes:
+- surface: MCP (storefront, UCP, customer account)
+  shape: '{"jsonrpc":"2.0","id":<id>,"error":{"code":<int>,"message":<string>,"data":{"code":<string>,"content":<string>,"continue_url":<url>}}}'
+  note: the JSON-RPC error is returned with a non-2xx HTTP status as well
+- surface: GraphQL storefront
+  shape: '{"errors":[{"message":<string>,"extensions":{...}}]}'
+problems:
+- code: -32001
+  http_status: 422
+  surface: https://shop.drinkag1.com/api/ucp/mcp
+  title: UCP discovery failed
+  data_code: invalid_profile_url
+  detail: 'Unable to fetch agent profile: Missing profile uri'
+  remediation: Pass a resolvable UCP agent profile URI in meta.ucp-agent.profile on the
+    tools/list or tool-call request. The response includes continue_url pointing at the
+    storefront for human hand-off.
+  observed: '2026-08-02'
+- code: 404
+  http_status: 404
+  surface: shop.drinkag1.com, account.drinkag1.com
+  title: Not found
+  detail: HTML 404 page returned for unpublished /.well-known/* and OpenAPI probe paths
+  observed: '2026-08-02'
+- code: 406
+  http_status: 406
+  surface: account.drinkag1.com
+  title: Not Acceptable
+  detail: the customer account host rejects requests for non-negotiated content types
+    (returned for every OpenAPI probe path)
+  observed: '2026-08-02'
+- code: 429
+  http_status: 429
+  surface: drinkag1.com
+  title: Too Many Requests
+  detail: the marketing edge rate-limits non-browser clients and returns an HTML body
+  remediation: agents.md instructs agents to back off on 429 and to use the MCP/UCP
+    endpoints on shop.drinkag1.com rather than scripting the marketing site
+  observed: '2026-08-02'
+not_observed:
+- application/problem+json (RFC 9457)
+- a published error-code reference
+- decline codes (payment authorization is handled by Shop Pay / Google Pay / Shopify
+  Card handlers, not by an AG1-published API)

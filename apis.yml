@@ -7,12 +7,16 @@ description: 'AG1 (formerly Athletic Greens) is a direct-to-consumer health and 
   from Athletic Greens to AG1 in December 2021. Revenue grew from roughly $160M in
   2021 to approximately $600M in 2024, with a valuation near $1.2B reported in January
   2025, built largely on podcast and creator affiliate marketing. AG1 is a consumer
-  commerce business rather than an API provider: as of the August 2026 enrichment pass
-  it publishes no developer portal, no API documentation, and no machine-readable API
-  contract, and DNS resolution shows no api/developer/docs subdomains. Its storefront
-  runs on Shopify (shop.drinkag1.com) behind a Vercel edge, and it appears in the API
-  Evangelist network as a secondary-market company profile.'
+  commerce business rather than a developer-facing API provider - it publishes no developer
+  portal, no API reference and no OpenAPI - but its Shopify storefront at shop.drinkag1.com
+  does expose a real, anonymously reachable agentic commerce surface: a Universal Commerce
+  Protocol (UCP 2026-04-08) merchant profile at /.well-known/ucp, a Storefront MCP server
+  at /api/mcp, a UCP/MCP commerce endpoint at /api/ucp/mcp, a Customer Account MCP server
+  at account.drinkag1.com, an introspectable Shopify Storefront GraphQL API, and published
+  agents.md / llms.txt / robots.txt agent instructions. Authentication for customer-scoped
+  surfaces is Shopify customer accounts OAuth 2.0 + OpenID Connect with PKCE.'
 url: https://raw.githubusercontent.com/api-evangelist/athletic-greens/refs/heads/main/apis.yml
+image: https://cdn.shopify.com/s/files/1/1523/4600/files/pouch_original_ae887f0b-a676-4453-adba-76bc51c30214.png?v=1770236075
 x-type: company
 x-source: harvest:secondary-market
 x-tier: stub
@@ -20,6 +24,11 @@ x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-02'
 modified: '2026-08-02'
+x-enrichment:
+  date: '2026-08-02'
+  status: enriched
+  artifacts_added: 17
+  pass: local-v1
 tags:
 - Company
 - Consumer
@@ -30,7 +39,91 @@ tags:
 - Ecommerce
 - Subscription
 - Wellness
-apis: []
+- Agentic Commerce
+- MCP
+- UCP
+- Shopify
+- GraphQL
+apis:
+- aid: athletic-greens:athletic-greens-storefront-graphql
+  name: AG1 Storefront GraphQL API
+  description: The Shopify Storefront GraphQL API as served from AG1's own storefront
+    host, shop.drinkag1.com. Anonymous schema introspection succeeds, exposing 35 query
+    fields, 41 mutations and 416 types covering products, collections, search, cart,
+    delivery, discounts, gift cards and Shop Pay payment request sessions. Versioned
+    on the Shopify quarterly calendar - 2025-04 through 2026-04 and `unstable` all
+    answer on this host.
+  humanURL: https://shop.drinkag1.com/agents.md
+  baseURL: https://shop.drinkag1.com/api/2026-04/graphql.json
+  tags:
+  - GraphQL
+  - Ecommerce
+  - Storefront
+  - Shopify
+  properties:
+  - type: GraphQL
+    url: graphql/athletic-greens-storefront.graphql
+  - type: DataModel
+    url: data-model/athletic-greens-data-model.yml
+- aid: athletic-greens:athletic-greens-storefront-mcp
+  name: AG1 Storefront MCP Server
+  description: Anonymous Model Context Protocol server on AG1's storefront host exposing
+    five tools - search_catalog, get_product_details, get_cart, update_cart and
+    search_shop_policies_and_faqs - with full JSON Schema input contracts returned by
+    tools/list without authentication.
+  humanURL: https://shop.drinkag1.com/agents.md
+  baseURL: https://shop.drinkag1.com/api/mcp
+  tags:
+  - MCP
+  - Agentic Commerce
+  - Catalog
+  - Cart
+  properties:
+  - type: MCPServer
+    url: mcp/athletic-greens-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/athletic-greens-tool-crosswalk.yml
+- aid: athletic-greens:athletic-greens-ucp-mcp
+  name: AG1 UCP Commerce Endpoint
+  description: The Universal Commerce Protocol MCP transport for AG1's store, advertised
+    in the store's /.well-known/ucp merchant profile. Implements the dev.ucp.shopping
+    service at UCP 2026-04-08 with cart, checkout, fulfillment, discount, order and
+    catalog search/lookup capabilities plus Google Pay, Shopify Card and Shop Pay
+    payment handlers. tools/list requires a resolvable UCP agent profile URI; an
+    anonymous call returns JSON-RPC error -32001 invalid_profile_url.
+  humanURL: https://ucp.dev/2026-04-08/specification/overview/
+  baseURL: https://shop.drinkag1.com/api/ucp/mcp
+  tags:
+  - UCP
+  - MCP
+  - Agentic Commerce
+  - Checkout
+  properties:
+  - type: WellKnown
+    url: well-known/athletic-greens-ucp.json
+  - type: Conformance
+    url: conformance/athletic-greens-conformance.yml
+- aid: athletic-greens:athletic-greens-customer-account-mcp
+  name: AG1 Customer Account MCP Server
+  description: Model Context Protocol server on AG1's customer account host exposing
+    four order-management tools - get_most_recent_order_status, get_order_status,
+    get_store_credit_balances and request_return. tools/list answers anonymously;
+    invoking the tools requires a Shopify customer account OAuth token carrying the
+    customer-account-mcp-api:full scope.
+  humanURL: https://account.drinkag1.com/
+  baseURL: https://account.drinkag1.com/customer/api/mcp
+  tags:
+  - MCP
+  - Customer Accounts
+  - Orders
+  - Returns
+  properties:
+  - type: MCPServer
+    url: mcp/athletic-greens-mcp.yml
+  - type: Authentication
+    url: authentication/athletic-greens-authentication.yml
+  - type: OAuthScopes
+    url: scopes/athletic-greens-scopes.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -53,3 +146,33 @@ common:
   url: mailto:support@drinkag1.com
 - type: SignUp
   url: https://drinkag1.com/members
+- type: Documentation
+  url: https://shop.drinkag1.com/agents.md
+- type: GraphQL
+  url: graphql/athletic-greens-storefront.graphql
+- type: MCPServer
+  url: mcp/athletic-greens-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/athletic-greens-tool-crosswalk.yml
+- type: WellKnown
+  url: well-known/athletic-greens-well-known.yml
+- type: OpenIDConnect
+  url: well-known/athletic-greens-openid-configuration.json
+- type: Authentication
+  url: authentication/athletic-greens-authentication.yml
+- type: OAuthScopes
+  url: scopes/athletic-greens-scopes.yml
+- type: Conformance
+  url: conformance/athletic-greens-conformance.yml
+- type: Conventions
+  url: conventions/athletic-greens-conventions.yml
+- type: ErrorCatalog
+  url: errors/athletic-greens-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/athletic-greens-lifecycle.yml
+- type: DataModel
+  url: data-model/athletic-greens-data-model.yml
+- type: LLMsTxt
+  url: llms/athletic-greens-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml

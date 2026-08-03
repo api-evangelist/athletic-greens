@@ -1,12 +1,27 @@
 generated: '2026-08-02'
 method: probed
-source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+source: live DNS/TLS/HTTP probes of apis.yml hosts
+note: ucp.dev is referenced as the humanURL of the UCP commerce endpoint but is the
+  protocol's own host, not an AG1-controlled domain, so it is excluded here.
 hosts:
 - host: drinkag1.com
   https: true
   tls_version: TLSv1.3
   cert_expires: Oct  9 22:44:32 2026 GMT
   hsts: null
+  note: edge answered HTTP 429 to every non-browser request probed on 2026-08-02
+- host: shop.drinkag1.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 28 06:10:02 2026 GMT
+  hsts: true
+  hsts_max_age: 7889238
+- host: account.drinkag1.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 29 18:04:01 2026 GMT
+  hsts: true
+  hsts_max_age: 7889238
 domains:
 - domain: drinkag1.com
   dnssec: false

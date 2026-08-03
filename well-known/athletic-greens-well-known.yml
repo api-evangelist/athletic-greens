@@ -1,0 +1,102 @@
+generated: '2026-08-02'
+method: probed
+source: live GET of /.well-known/* on every host in apis.yml
+hosts:
+- host: https://shop.drinkag1.com
+  documents:
+  - path: /.well-known/ucp
+    status: 200
+    file: athletic-greens-ucp.json
+    note: UCP 2026-04-08 merchant profile - services, capabilities, payment handlers
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: athletic-greens-oauth-authorization-server.json
+    note: RFC 8414 metadata for Shopify customer accounts (issuer shopify.com/authentication/15234600)
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: athletic-greens-openid-configuration.json
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: athletic-greens-oauth-protected-resource.json
+    note: RFC 9728 - resource https://shop.drinkag1.com
+  - path: /.well-known/apple-app-site-association
+    status: 200
+    note: not an API discovery document; observed only
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/mcp.json
+    status: 404
+- host: https://account.drinkag1.com
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: athletic-greens-openid-configuration.json
+    note: identical body to the shop host
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: athletic-greens-oauth-authorization-server.json
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: athletic-greens-account-oauth-protected-resource.json
+    note: resource https://account.drinkag1.com
+  - path: /authentication/.well-known/jwks.json
+    status: 200
+    file: athletic-greens-jwks.json
+    note: Ed25519 + RSA signing keys
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/ucp
+    status: 404
+- host: https://drinkag1.com
+  note: the marketing edge answered HTTP 429 to every request from a non-browser client
+    on 2026-08-02, including with a browser User-Agent and pacing; no /.well-known
+    document could be confirmed either present or absent on this host.
+  documents:
+  - path: /.well-known/security.txt
+    status: 429
+  - path: /.well-known/agent-card.json
+    status: 429
+  - path: /.well-known/agent.json
+    status: 429
+  - path: /.well-known/api-catalog
+    status: 429
+  - path: /.well-known/ai-plugin.json
+    status: 429
+  - path: /.well-known/ucp
+    status: 429
+  - path: /llms.txt
+    status: 429
+  - path: /robots.txt
+    status: 429
+non_well_known_agent_surfaces:
+- url: https://shop.drinkag1.com/agents.md
+  status: 200
+  file: ../skills/athletic-greens-agents.md
+- url: https://shop.drinkag1.com/llms.txt
+  status: 200
+  file: ../llms/athletic-greens-llms.txt
+- url: https://shop.drinkag1.com/robots.txt
+  status: 200
+  note: carries agent policy - UCP/MCP endpoints and a no-automated-checkout rule
+- url: https://shop.drinkag1.com/products.json
+  status: 200
+  note: public product catalog JSON
+- url: https://shop.drinkag1.com/sitemap.xml
+  status: 200
+security_txt: none published on any reachable AG1 host

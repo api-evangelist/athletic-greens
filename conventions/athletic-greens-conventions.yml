@@ -1,0 +1,82 @@
+generated: '2026-08-02'
+method: probed
+source: live responses from shop.drinkag1.com and account.drinkag1.com, 2026-08-02;
+  https://shop.drinkag1.com/agents.md; https://shop.drinkag1.com/robots.txt
+note: AG1 publishes no developer docs of its own. These are the cross-cutting semantics
+  observed on the agentic commerce surface it actually serves (Shopify-native).
+authentication:
+  storefront_graphql: public - no caller credential required on shop.drinkag1.com
+  storefront_mcp: anonymous
+  ucp_mcp: UCP agent profile URI in meta.ucp-agent.profile (required; missing profile
+    returns JSON-RPC -32001 invalid_profile_url)
+  customer_account_mcp: OAuth 2.0 bearer in the Authorization header, scope
+    customer-account-mcp-api:full
+  artifact: authentication/athletic-greens-authentication.yml
+versioning:
+  scheme: date-based path segment
+  graphql:
+    form: /api/{YYYY-MM}/graphql.json
+    current: '2026-04'
+    observed_serving: ['2025-04', '2025-07', '2025-10', '2026-01', '2026-04', unstable]
+    response_header: x-shopify-api-version
+  mcp:
+    response_header: x-shopify-mcp-api-version
+    observed_value: unstable
+  ucp:
+    current: '2026-04-08'
+    supported: ['2026-04-08', '2026-01-23']
+    discovery: https://shop.drinkag1.com/.well-known/ucp
+  artifact: lifecycle/athletic-greens-lifecycle.yml
+idempotency:
+  supported: false
+  evidence: no Idempotency-Key header, idempotency_key field or replay semantics appears
+    in any of the 9 MCP tool input schemas, in the UCP merchant profile, or in the
+    Storefront GraphQL schema; cart mutations are keyed by cart_id and are last-write-wins
+  note: recorded as absent - no Idempotency pointer is emitted for this provider
+pagination:
+  style: opaque cursor
+  request: catalog.pagination.cursor (search_catalog tool); first/last/after/before on
+    every GraphQL connection
+  response: pagination.cursor on the tool response; pageInfo{hasNextPage,hasPreviousPage,startCursor,endCursor}
+    on GraphQL connections
+  note: search_catalog deliberately returns a small first page; agents are expected to
+    follow pagination.cursor when the buyer asks for more
+buyer_context:
+  fields: [address_country, address_region, postal_code, language, currency, intent]
+  where: catalog.context on search_catalog; country/language on get_product_details
+  purpose: pricing, availability and localization
+  signals: [dev.ucp.buyer_ip, dev.ucp.user_agent]
+  note: signals are supplied by the calling platform for authorization and abuse prevention
+request_tracing:
+  header: x-request-id
+  observed: 'e.g. 02d008ac-e8ce-4c63-ae85-bb61471b3bce-1785692710 on GraphQL and MCP
+    responses'
+  other_headers: [x-dc, x-stats-apiclientid]
+error_envelope:
+  mcp: JSON-RPC 2.0 error object - {jsonrpc, id, error:{code, message, data:{code,
+    content, continue_url}}}; HTTP status carries the failure too (422 observed)
+  graphql: standard GraphQL errors[] with message and extensions
+  problem_json: not used
+  artifact: errors/athletic-greens-problem-types.yml
+rate_limiting:
+  graphql: query-cost based - every response carries extensions.cost.requestedQueryCost
+    (observed 1 and 3); no X-RateLimit-* headers were returned
+  mcp: documented as rate-limited per IP in agents.md, with instruction to back off on
+    429; no rate-limit headers observed on 200 responses
+  marketing_host: drinkag1.com answered 429 to every non-browser request on 2026-08-02
+  documented_at: https://shop.drinkag1.com/agents.md
+agent_policy:
+  human_approval_required: true
+  statement: robots.txt and agents.md both state that checkout, payment and order
+    placement must not be completed automatically - no scripted form fills or browser
+    automation that finalize payment without an explicit, contemporaneous human
+    approval step
+  recommended_path: UCP/MCP endpoints, or the Shop skill at https://shop.app/SKILL.md
+  contact: bots@shopify.com
+public_read_surfaces:
+  - GET /products.json
+  - GET /products/{handle}.json
+  - GET /collections/{handle}/products.json
+  - GET /collections/all
+  - GET /search?q={query}&type=product
+  - GET /sitemap.xml

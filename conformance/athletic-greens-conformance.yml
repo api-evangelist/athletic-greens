@@ -1,0 +1,89 @@
+generated: '2026-08-02'
+method: probed
+source: live probes of shop.drinkag1.com and account.drinkag1.com, 2026-08-02
+note: AG1 publishes no compliance program of its own; every standard below is asserted
+  only where a live document or response was observed on an AG1 host.
+standards:
+- id: ucp-2026-04-08
+  name: Universal Commerce Protocol
+  conforms: true
+  evidence: /.well-known/ucp advertises ucp.version 2026-04-08 with supported_versions
+    2026-04-08 and 2026-01-23, the dev.ucp.shopping service over MCP, and the checkout,
+    fulfillment, discount, cart, order, catalog.search and catalog.lookup capabilities
+  spec: https://ucp.dev/2026-04-08/specification/overview/
+- id: mcp
+  name: Model Context Protocol
+  conforms: true
+  evidence: three JSON-RPC 2.0 MCP endpoints answer on AG1 hosts; tools/list returned
+    5 tools with JSON Schema inputSchema at shop.drinkag1.com/api/mcp and 4 tools at
+    account.drinkag1.com/customer/api/mcp
+- id: jsonrpc-2.0
+  name: JSON-RPC 2.0
+  conforms: true
+  evidence: every MCP response carried jsonrpc "2.0"; errors use the JSON-RPC error
+    object (observed code -32001)
+- id: graphql
+  name: GraphQL
+  conforms: true
+  evidence: anonymous introspection at shop.drinkag1.com/api/2026-04/graphql.json
+    returned a 416-type schema, saved to graphql/athletic-greens-storefront.graphql
+- id: oauth2
+  name: OAuth 2.0
+  conforms: true
+  evidence: authorization_code + refresh_token grants published at
+    account.drinkag1.com/authentication/oauth/{authorize,token}
+- id: oidc
+  name: OpenID Connect
+  conforms: true
+  evidence: /.well-known/openid-configuration with issuer, jwks_uri, id_token signing
+    RS256 and the openid/email scopes
+- id: rfc8414
+  name: OAuth 2.0 Authorization Server Metadata
+  conforms: true
+  evidence: /.well-known/oauth-authorization-server returns 200 on both shop and
+    account hosts
+- id: rfc9728
+  name: OAuth 2.0 Protected Resource Metadata
+  conforms: true
+  evidence: /.well-known/oauth-protected-resource returns 200 on both hosts with
+    resource + authorization_servers + bearer_methods_supported
+- id: rfc7636
+  name: PKCE
+  conforms: true
+  evidence: code_challenge_methods_supported ["S256"]
+- id: llmstxt
+  name: llms.txt
+  conforms: true
+  evidence: https://shop.drinkag1.com/llms.txt returns 200 with agent instructions
+- id: agents-md
+  name: AGENTS.md agent instructions
+  conforms: true
+  evidence: https://shop.drinkag1.com/agents.md returns 200 and is referenced from
+    robots.txt as the canonical agent-facing description of the store
+- id: openapi
+  name: OpenAPI
+  conforms: false
+  evidence: /openapi.json, /openapi.yaml, /swagger.json, /api-docs and /v1/openapi.json
+    all 404 (shop) or 406 (account); no OpenAPI is published anywhere on the AG1 surface
+- id: asyncapi
+  name: AsyncAPI
+  conforms: false
+  evidence: no event, streaming or webhook surface is published by AG1
+- id: a2a
+  name: A2A Agent Card
+  conforms: false
+  evidence: /.well-known/agent-card.json and /.well-known/agent.json return 404 on
+    shop.drinkag1.com and account.drinkag1.com; drinkag1.com returned 429 to every probe
+- id: rfc9457-problem-details
+  name: RFC 9457 Problem Details
+  conforms: false
+  evidence: errors are JSON-RPC error objects and GraphQL errors[]; no
+    application/problem+json was observed
+- id: rfc9116-security-txt
+  name: security.txt
+  conforms: false
+  evidence: /.well-known/security.txt 404 on shop and account hosts
+compliance_program:
+  published: false
+  note: no trust center, certification list or compliance page was found on any AG1
+    host; the probe-security-programs.py pass returned vdp=none trust=none

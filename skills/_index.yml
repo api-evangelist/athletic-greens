@@ -1,0 +1,29 @@
+generated: '2026-08-02'
+method: generated
+note: AG1 publishes no OpenAPI; these skills are grounded in the tool names and input
+  schemas returned by live MCP tools/list calls and in the fields present in the captured
+  Storefront GraphQL SDL. The provider's own agent instructions are saved verbatim as
+  athletic-greens-agents.md (method searched).
+skills:
+- file: athletic-greens-agents.md
+  name: AG1 store agent instructions (provider-published)
+  method: searched
+  source: https://shop.drinkag1.com/agents.md
+  api: https://shop.drinkag1.com/api/ucp/mcp
+  operations: []
+- file: athletic-greens-find-and-price-products.md
+  name: Find and price AG1 products
+  method: generated
+  api: https://shop.drinkag1.com/api/mcp
+  operations: [search_catalog, get_product_details, search_shop_policies_and_faqs]
+- file: athletic-greens-build-cart-and-hand-off.md
+  name: Build an AG1 cart and hand off for buyer approval
+  method: generated
+  api: https://shop.drinkag1.com/api/mcp
+  operations: [update_cart, get_cart]
+- file: athletic-greens-order-status-and-returns.md
+  name: Check an AG1 order and request a return
+  method: generated
+  api: https://account.drinkag1.com/customer/api/mcp
+  operations: [get_most_recent_order_status, get_order_status, get_store_credit_balances,
+    request_return]
