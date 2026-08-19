@@ -2,9 +2,9 @@ generated: '2026-08-02'
 method: searched
 status: published
 source: https://shop.drinkag1.com/agents.md
-note: AG1 does not operate a bespoke MCP server; these are the Shopify-native agentic
-  commerce endpoints served from AG1's own hosts. Every tool list below was captured
-  from a live anonymous JSON-RPC tools/list call on 2026-08-02.
+note: AG1 does not operate a bespoke MCP server; these are the Shopify-native agentic commerce endpoints
+  served from AG1's own hosts. Every tool list below was captured from a live anonymous JSON-RPC tools/list
+  call on 2026-08-02.
 servers:
 - name: athletic-greens-storefront-mcp
   label: AG1 Storefront MCP
@@ -20,33 +20,52 @@ servers:
     content_type: application/json
   tools:
   - name: search_catalog
-    description: Search for products from the online store, hosted on Shopify. Accepts
-      a natural-language query, filter criteria, or both. Response conforms to the UCP
-      catalog search capability (dev.ucp.shopping.catalog.search).
-    input_properties: [catalog, meta]
-    input_shape: 'catalog.query, catalog.context{address_country,address_region,postal_code,language,currency,intent},
+    description: Search for products from the online store, hosted on Shopify. Accepts a natural-language
+      query, filter criteria, or both. Response conforms to the UCP catalog search capability (dev.ucp.shopping.catalog.search).
+    input_properties:
+    - catalog
+    - meta
+    input_shape: catalog.query, catalog.context{address_country,address_region,postal_code,language,currency,intent},
       catalog.signals{dev.ucp.buyer_ip,dev.ucp.user_agent}, catalog.filters{categories,price{min,max}},
-      catalog.pagination{cursor}, meta{ucp-agent{profile}}'
+      catalog.pagination{cursor}, meta{ucp-agent{profile}}
   - name: get_product_details
     description: Look up a product by ID; pass options to select a specific variant.
-    input_properties: [product_id, options, country, language]
-    required: [product_id]
+    input_properties:
+    - product_id
+    - options
+    - country
+    - language
+    required:
+    - product_id
   - name: get_cart
-    description: Get the cart including items, shipping options, discount info and
-      checkout url for a given cart id.
-    input_properties: [cart_id]
-    required: [cart_id]
+    description: Get the cart including items, shipping options, discount info and checkout url for a
+      given cart id.
+    input_properties:
+    - cart_id
+    required:
+    - cart_id
   - name: update_cart
-    description: Perform updates to a cart - add/remove/update line items, buyer
-      information, delivery addresses, delivery options, discount codes, gift cards
-      and note.
-    input_properties: [cart_id, add_items, update_items, remove_line_ids, buyer_identity,
-      delivery_addresses_to_add, delivery_addresses_to_replace, selected_delivery_options,
-      discount_codes, gift_card_codes, note]
+    description: Perform updates to a cart - add/remove/update line items, buyer information, delivery
+      addresses, delivery options, discount codes, gift cards and note.
+    input_properties:
+    - cart_id
+    - add_items
+    - update_items
+    - remove_line_ids
+    - buyer_identity
+    - delivery_addresses_to_add
+    - delivery_addresses_to_replace
+    - selected_delivery_options
+    - discount_codes
+    - gift_card_codes
+    - note
   - name: search_shop_policies_and_faqs
     description: Get facts about the store's policies, products or services.
-    input_properties: [query, context]
-    required: [query]
+    input_properties:
+    - query
+    - context
+    required:
+    - query
 - name: athletic-greens-ucp-mcp
   label: AG1 UCP Commerce Endpoint
   transport: http
@@ -54,15 +73,17 @@ servers:
   url: https://shop.drinkag1.com/api/ucp/mcp
   discovery: https://shop.drinkag1.com/.well-known/ucp
   ucp_version: '2026-04-08'
-  ucp_supported_versions: ['2026-04-08', '2026-01-23']
+  ucp_supported_versions:
+  - '2026-04-08'
+  - '2026-01-23'
   auth: UCP agent profile required
   gated: true
   x-evidence:
     fetched: '2026-08-02'
     method: POST tools/list (anonymous, and with an unresolvable profile URI)
     http_status: 422
-    error: 'JSON-RPC -32001 UCP discovery failed / invalid_profile_url: "Unable to fetch
-      agent profile: Missing profile uri"'
+    error: 'JSON-RPC -32001 UCP discovery failed / invalid_profile_url: "Unable to fetch agent profile:
+      Missing profile uri"'
   capabilities:
   - dev.ucp.shopping.catalog.search
   - dev.ucp.shopping.catalog.lookup
@@ -82,8 +103,8 @@ servers:
   transport: http
   protocol: JSON-RPC 2.0 (Model Context Protocol)
   url: https://account.drinkag1.com/customer/api/mcp
-  auth: Shopify customer account OAuth 2.0 bearer token (scope customer-account-mcp-api:full)
-    for tool invocation; tools/list answers anonymously
+  auth: Shopify customer account OAuth 2.0 bearer token (scope customer-account-mcp-api:full) for tool
+    invocation; tools/list answers anonymously
   tools_list_file: athletic-greens-customer-account-tools-list.json
   x-evidence:
     fetched: '2026-08-02'
@@ -95,23 +116,36 @@ servers:
     description: Gets the status of the customer's most recent order.
     input_properties: []
   - name: get_order_status
-    description: Fetches a specific order by order number for a logged-in customer and
-      returns status details about that order.
-    input_properties: [order_number]
-    required: [order_number]
+    description: Fetches a specific order by order number for a logged-in customer and returns status
+      details about that order.
+    input_properties:
+    - order_number
+    required:
+    - order_number
   - name: get_store_credit_balances
     description: Fetches the customer's store credit balances if they have any.
     input_properties: []
   - name: request_return
     description: Allows a customer to request a return for an order.
-    input_properties: [order_id, order_number, line_items]
-    required: [line_items]
+    input_properties:
+    - order_id
+    - order_number
+    - line_items
+    required:
+    - line_items
 agent_instructions:
 - https://shop.drinkag1.com/agents.md
 - https://shop.drinkag1.com/llms.txt
 - https://shop.drinkag1.com/robots.txt
 policy:
   human_approval_required: true
-  statement: Checkout, payment and order placement must not be completed automatically;
-    the store's robots.txt and agents.md both require an explicit, contemporaneous
-    human approval step before payment.
+  statement: Checkout, payment and order placement must not be completed automatically; the store's robots.txt
+    and agents.md both require an explicit, contemporaneous human approval step before payment.
+deployment:
+  mode: remote
+  endpoint: https://shop.drinkag1.com/api/mcp
+  verified: probed
+  probe: live
+  tools: 5
+  checked: '2026-08-12'
+  source: catalog MCP census
