@@ -36,6 +36,21 @@ tags:
 - Nutrition
 - Supplements
 - Direct to Consumer
+- E-Commerce
+- Subscription
+- Wellness
+- Agentic Commerce
+- MCP
+- UCP
+- Shopify
+- GraphQL
+tags_raw:
+- Company
+- Consumer
+- Health
+- Nutrition
+- Supplements
+- Direct to Consumer
 - Ecommerce
 - Subscription
 - Wellness
@@ -56,6 +71,11 @@ apis:
   humanURL: https://shop.drinkag1.com/agents.md
   baseURL: https://shop.drinkag1.com/api/2026-04/graphql.json
   tags:
+  - GraphQL
+  - E-Commerce
+  - Storefront
+  - Shopify
+  tags_raw:
   - GraphQL
   - Ecommerce
   - Storefront
@@ -113,6 +133,11 @@ apis:
   humanURL: https://account.drinkag1.com/
   baseURL: https://account.drinkag1.com/customer/api/mcp
   tags:
+  - MCP
+  - Customer Accounts
+  - Order
+  - Returns
+  tags_raw:
   - MCP
   - Customer Accounts
   - Orders
