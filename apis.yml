@@ -16,6 +16,17 @@ description: 'AG1 (formerly Athletic Greens) is a direct-to-consumer health and 
   agents.md / llms.txt / robots.txt agent instructions. Authentication for customer-scoped
   surfaces is Shopify customer accounts OAuth 2.0 + OpenID Connect with PKCE.'
 url: https://raw.githubusercontent.com/api-evangelist/athletic-greens/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://cdn.shopify.com/s/files/1/1523/4600/files/pouch_original_ae887f0b-a676-4453-adba-76bc51c30214.png?v=1770236075
 x-type: company
 x-source: harvest:secondary-market
