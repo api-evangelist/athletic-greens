@@ -27,6 +27,20 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  - scopes
+  - security
+  generated: '2026-09-02'
+  method: derived
 image: https://cdn.shopify.com/s/files/1/1523/4600/files/pouch_original_ae887f0b-a676-4453-adba-76bc51c30214.png?v=1770236075
 x-type: company
 x-source: harvest:secondary-market
