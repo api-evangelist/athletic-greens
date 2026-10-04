@@ -110,6 +110,9 @@ apis:
     url: graphql/athletic-greens-storefront.graphql
   - type: DataModel
     url: data-model/athletic-greens-data-model.yml
+  x-surface: platform-generated
+  x-platform: shopify
+  x-platform-surface: storefront-graphql
 - aid: athletic-greens:athletic-greens-storefront-mcp
   name: AG1 Storefront MCP Server
   description: Anonymous Model Context Protocol server on AG1's storefront host exposing
@@ -128,6 +131,9 @@ apis:
     url: mcp/athletic-greens-mcp.yml
   - type: ToolCrosswalk
     url: mcp/athletic-greens-tool-crosswalk.yml
+  x-surface: platform-generated
+  x-platform: shopify
+  x-platform-surface: storefront-mcp
 - aid: athletic-greens:athletic-greens-ucp-mcp
   name: AG1 UCP Commerce Endpoint
   description: The Universal Commerce Protocol MCP transport for AG1's store, advertised
@@ -153,6 +159,9 @@ apis:
     url: well-known/athletic-greens-ucp.json
   - type: Conformance
     url: conformance/athletic-greens-conformance.yml
+  x-surface: platform-generated
+  x-platform: shopify
+  x-platform-surface: ucp
 - aid: athletic-greens:athletic-greens-customer-account-mcp
   name: AG1 Customer Account MCP Server
   description: Model Context Protocol server on AG1's customer account host exposing
@@ -179,6 +188,9 @@ apis:
     url: authentication/athletic-greens-authentication.yml
   - type: OAuthScopes
     url: scopes/athletic-greens-scopes.yml
+  x-surface: platform-generated
+  x-platform: shopify
+  x-platform-surface: customer-account-mcp
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
