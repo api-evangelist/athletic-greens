@@ -64,5 +64,103 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-AG1 is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/athletic-greens_stock/
+AG1 (formerly Athletic Greens) is a direct-to-consumer health and nutrition company founded in December 2010 by Chris Ashenden and headquartered in Carson City, Nevada. It sells a single flagship product - AG1, a daily foundational nutrition powder - on a subscription model through drinkag1.com, and the brand was renamed from Athletic Greens to AG1 in December 2021. Revenue grew from roughly $160M in 2021 to approximately $600M in 2024, with a valuation near $1.2B reported in January 2025, built largely on podcast and creator affiliate marketing. AG1 is a consumer commerce business rather than a developer-facing API provider - it publishes no developer portal, no API reference and no OpenAPI - but its Shopify storefront at shop.drinkag1.com does expose a real, anonymously reachable agentic commerce surface: a Universal Commerce Protocol (UCP 2026-04-08) merchant profile at /.well-known/ucp, a Storefront MCP server at /api/mcp, a UCP/MCP commerce endpoint at /api/ucp/mcp, a Customer Account MCP server at account.drinkag1.com, an introspectable Shopify Storefront GraphQL API, and published agents.md / llms.txt / robots.txt agent instructions. Authentication for customer-scoped surfaces is Shopify customer accounts OAuth 2.0 + OpenID Connect with PKCE.
+
+**Areas:** Company · Consumer · Health · Nutrition · Supplements · Direct to Consumer · E-Commerce · Subscription · Wellness · Agentic Commerce · MCP · Universal Commerce Protocol
+
+## AG1 on APIs.io
+
+Everything profiled for AG1 is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/athletic-greens/](https://apis.io/providers/athletic-greens/)** — or go straight to one of the APIs or properties below.
+
+### APIs (4)
+
+- [AG1 Storefront GraphQL API](https://apis.io/apis/athletic-greens/athletic-greens-storefront-graphql/) — The Shopify Storefront GraphQL API as served from AG1's own storefront host, shop.drinkag1.com. Anonymous schema introspection succeeds, exposing 35 query…
+- [AG1 Storefront MCP Server](https://apis.io/apis/athletic-greens/athletic-greens-storefront-mcp/) — Anonymous Model Context Protocol server on AG1's storefront host exposing five tools - search_catalog, get_product_details, get_cart, update_cart and…
+- [AG1 UCP Commerce Endpoint](https://apis.io/apis/athletic-greens/athletic-greens-ucp-mcp/) — The Universal Commerce Protocol MCP transport for AG1's store, advertised in the store's /.well-known/ucp merchant profile. Implements the dev.ucp.shopping…
+- [AG1 Customer Account MCP Server](https://apis.io/apis/athletic-greens/athletic-greens-customer-account-mcp/) — Model Context Protocol server on AG1's customer account host exposing four order-management tools - get_most_recent_order_status, get_order_status,…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [athletic-greens-mcp.yml](https://apis.io/servers/athletic-greens/athletic-greens-mcp-yml/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Athletic Greens Authentication](https://apis.io/security/athletic-greens/athletic-greens-authentication/)
+- [Athletic Greens Domain Security](https://apis.io/security/athletic-greens/athletic-greens-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Athletic Greens Scopes](https://apis.io/scopes/athletic-greens/athletic-greens-scopes/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://drinkag1.com/)
+- [Documentation](https://shop.drinkag1.com/agents.md)
+- [Sign up](https://drinkag1.com/members)
+- [Terms of service](https://drinkag1.com/about-us/terms-and-conditions)
+- [Privacy policy](https://drinkag1.com/privacy)
+
+## API Evangelist rating
+
+**Kin Score 24.4** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 80.0 |
+| Contract quality | 10.4 |
+| Contract governance | 18.2 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 28.0 |
+| Access clarity | 17.1 |
+
+**Agent readiness 34.2** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | platform (partial credit) |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | — |
+| Agentic Commerce | platform (partial credit) |
+
+**Regulatory alignment 29.7** — Health
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/athletic-greens/](https://apis.io/providers/athletic-greens/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for AG1: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/athletic-greens/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
